@@ -44,8 +44,9 @@ class GameScene extends phaser.Scene {
 
         var terrain_texture = this.textures.get('terrain');
         var frames_names = terrain_texture.getFrameNames();
-        trace(frames_names);
+        //trace(frames_names);
 
+        // place random base tiles 
         var frames = ['grass', 'grass2', 'grass3', 'grass4', 'grass5', 'dirt', 'water'];
         for (y in 0...height) {
             for (x in 0...width) {
@@ -106,6 +107,7 @@ class GameScene extends phaser.Scene {
                     i.setDepth(1);
                 }
                 else {
+                    // image
                     var i = this.add.image(tile.pixelX, tile.pixelY, 'terrain', frame.name);
                     i.setOrigin(0, 0);
                 }

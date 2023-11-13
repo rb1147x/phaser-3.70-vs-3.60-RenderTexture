@@ -7,6 +7,7 @@ function $extend(from, fields) {
 	return proto;
 }
 var GameScene = function(config) {
+	this.use_rt_blitter_or_image = "rt";
 	this.tile_size = 32;
 	this.height = 100;
 	this.width = 100;
@@ -26,7 +27,7 @@ GameScene.prototype = $extend(Phaser.Scene.prototype,{
 		var base_layer = tilemap.createBlankLayer("terrain_base_layer",tiles);
 		var terrain_texture = this.textures.get("terrain");
 		var frames_names = terrain_texture.getFrameNames();
-		console.log("src/GameScene.hx:45:",frames_names);
+		console.log("src/GameScene.hx:47:",frames_names);
 		var frames = ["grass","grass2","grass3","grass4","grass5","dirt","water"];
 		var _g = 0;
 		var _g1 = this.height;
@@ -67,7 +68,16 @@ GameScene.prototype = $extend(Phaser.Scene.prototype,{
 				while(used_edges.indexOf(edge) >= 0) edge = Phaser.Math.RND.pick(dirt_edges);
 				used_edges.push(edge);
 				var frame = texture.get(edge);
-				rt.draw(frame,tile.pixelX,tile.pixelY);
+				if(this.use_rt_blitter_or_image == "rt") {
+					rt.draw(frame,tile.pixelX,tile.pixelY);
+				} else if(this.use_rt_blitter_or_image == "blitter") {
+					var i = this.add.blitter(tile.pixelX,tile.pixelY,texture.key,frame.name);
+					i.create(0,0,frame.name);
+					i.setDepth(1);
+				} else {
+					var i1 = this.add.image(tile.pixelX,tile.pixelY,"terrain",frame.name);
+					i1.setOrigin(0,0);
+				}
 			}
 		}
 	}

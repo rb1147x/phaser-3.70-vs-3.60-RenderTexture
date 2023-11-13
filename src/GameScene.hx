@@ -11,6 +11,8 @@ class GameScene extends phaser.Scene {
     var keys:phaser.input.keyboard.Key;
     var keya:phaser.input.keyboard.Key;
 
+    var use_rt_blitter_or_image = 'rt';
+
     public function new(?config:phaser.types.scenes.SettingsConfig) {
         super(config);
     }
@@ -92,7 +94,22 @@ class GameScene extends phaser.Scene {
                 used_edges.push(edge);
                 
                 var frame = texture.get(edge);
-                rt.draw(frame, tile.pixelX, tile.pixelY);
+
+                if (use_rt_blitter_or_image == 'rt') {
+                    // render texture
+                    rt.draw(frame, tile.pixelX, tile.pixelY);
+                }
+                else if (use_rt_blitter_or_image == 'blitter') {
+                    // blitters
+                    var i = this.add.blitter(tile.pixelX, tile.pixelY, texture.key, frame.name);
+                    i.create(0, 0, frame.name);
+                    i.setDepth(1);
+                }
+                else {
+                    var i = this.add.image(tile.pixelX, tile.pixelY, 'terrain', frame.name);
+                    i.setOrigin(0, 0);
+                }
+                
             }
         }
 
